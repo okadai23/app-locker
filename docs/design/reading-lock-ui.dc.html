@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;family=Shippori+Mincho:wght@600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDE7D8;font-family:'Noto Sans JP',system-ui,sans-serif}
+a{color:#2E4057}a:hover{color:#A6453C}
+</style>
+</helmet>
+<section style="padding:36px 44px 8px" data-screen-label="デザインノート">
+<div style="max-width:760px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:12px;padding:24px 28px">
+<div style="font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;color:#20293B;margin:0 0 10px">読書ロック — UIデザイン一式</div>
+<div style="font-size:12.5px;line-height:1.8;color:#5C5647">
+配色は 生成り <span style="font-family:monospace">#F5F0E4</span> / インクネイビー <span style="font-family:monospace">#2E4057</span> / しおりの赤 <span style="font-family:monospace">#A6453C</span>。数字と見出しに明朝(Shippori Mincho)を使い「本のページ」の質感に。進捗リングはホーム・ロック・計測・通知で同一言語。ロック画面は深いネイビー1面のみで威圧色(赤・警告)を使わず、逃げ道ボタンは一切なし。ソースは K / D / 紙 の文字チップで統一(実ロゴ不使用)。上から優先順位順に並んでいます。
+</div>
+</div>
+</section>
+<section style="padding:28px 44px 36px;scroll-margin-top:16px" id="g-lock" data-screen-label="ロックオーバーレイ">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-lock" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">A</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">ロックオーバーレイ(最重要)</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1a" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1a" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1a</a>X を開いた瞬間 — 全画面オーバーレイ</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" dark="{{ true }}" bg="#20293B" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#20293B;padding:28px 28px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:10px;margin-top:36px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:8px 18px 8px 10px">
+<div style="width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#EAE5D6">X</div>
+<span style="font-size:13px;color:#C9CFDC">X はロック中です</span>
+</div>
+<div style="position:relative;width:236px;height:236px;margin:44px 0 8px">
+<svg width="236" height="236" viewBox="0 0 236 236">
+<circle cx="118" cy="118" r="102" style="fill:none;stroke:rgba(255,255,255,.12);stroke-width:14"></circle>
+<circle cx="118" cy="118" r="102" transform="rotate(-90 118 118)" style="fill:none;stroke:#E8DFC9;stroke-width:14;stroke-linecap:round;stroke-dasharray:256 641"></circle>
+</svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:56px;font-weight:700;color:#F5F0E4;line-height:1">18<span style="font-size:22px;font-weight:600">分</span></div>
+<div style="font-size:12px;color:#8E96A8;letter-spacing:.08em">のこり読書時間</div>
+</div>
+</div>
+<div style="font-size:16px;font-weight:500;color:#EAE5D6;margin-top:20px;text-align:center;line-height:1.7">あと18分の読書で<br>解禁されます</div>
+<div style="font-size:12px;color:#8E96A8;margin-top:8px">今日の読書 12/30分</div>
+<div style="flex:1"></div>
+<div style="width:100%;display:flex;flex-direction:column;gap:12px">
+<div style="height:54px;border-radius:100px;background:#A6453C;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.04em">読書を開始</div>
+<div style="height:48px;border-radius:100px;border:1.5px solid rgba(232,223,201,.35);color:#E8DFC9;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">読書ロックを開く</div>
+</div>
+<div style="font-size:11px;color:#66708A;margin-top:14px;text-align:center;line-height:1.7">「読書を開始」は開始フローへ、<br>「読書ロックを開く」はホームへ。X には戻れません</div>
+</div>
+</x-import>
+</div>
+</div>
+</section>
+
+
+<section style="padding:28px 44px 36px;border-top:1px solid rgba(0,0,0,.07);scroll-margin-top:16px" id="g-home" data-screen-label="ホーム">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-home" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">B</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">ホーム — 3状態 + ダークモード</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1b" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1b" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1b</a>0分・未達成</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div><div style="font-family:'Shippori Mincho',serif;font-size:21px;font-weight:700;color:#20293B">読書ロック</div><div style="font-size:12px;color:#8B8270;margin-top:2px">7月26日(日)</div></div>
+<div style="display:flex;align-items:center;gap:6px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:6px 12px"><span style="display:inline-block;width:10px;height:14px;background:#A6453C;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span><span style="font-size:12px;font-weight:500;color:#5C5647">6日連続</span></div>
+</div>
+<div style="align-self:center;margin-top:26px;display:flex;align-items:center;gap:7px;background:rgba(46,64,87,.09);border-radius:100px;padding:7px 16px"><span style="width:7px;height:7px;border-radius:50%;background:#2E4057"></span><span style="font-size:12.5px;font-weight:600;color:#2E4057;white-space:nowrap">ロック中</span></div>
+<div style="position:relative;width:236px;height:236px;align-self:center;margin:22px 0 6px">
+<svg width="236" height="236" viewBox="0 0 236 236"><circle cx="118" cy="118" r="102" style="fill:none;stroke:#E8DFC9;stroke-width:14"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:58px;font-weight:700;color:#20293B;line-height:1">0<span style="font-size:22px;font-weight:600;color:#8B8270">/30分</span></div>
+<div style="font-size:12px;color:#8B8270">今日はまだ読んでいません</div>
+</div>
+</div>
+<div style="height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.04em;margin-top:14px">読書を開始</div>
+<div style="font-size:12px;font-weight:600;color:#8B8270;margin:26px 0 10px;letter-spacing:.06em">今日のセッション</div>
+<div style="background:#FDFBF6;border:1px dashed #E0D7BF;border-radius:14px;padding:22px;text-align:center;font-size:12.5px;color:#8B8270">まだ記録がありません</div>
+</div>
+</x-import>
+</div>
+<div id="1c" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1c" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1c</a>途中(12分)・未達成</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div><div style="font-family:'Shippori Mincho',serif;font-size:21px;font-weight:700;color:#20293B">読書ロック</div><div style="font-size:12px;color:#8B8270;margin-top:2px">7月26日(日)</div></div>
+<div style="display:flex;align-items:center;gap:6px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:6px 12px"><span style="display:inline-block;width:10px;height:14px;background:#A6453C;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span><span style="font-size:12px;font-weight:500;color:#5C5647">6日連続</span></div>
+</div>
+<div style="align-self:center;margin-top:26px;display:flex;align-items:center;gap:7px;background:rgba(46,64,87,.09);border-radius:100px;padding:7px 16px"><span style="width:7px;height:7px;border-radius:50%;background:#2E4057"></span><span style="font-size:12.5px;font-weight:600;color:#2E4057;white-space:nowrap">ロック中</span></div>
+<div style="position:relative;width:236px;height:236px;align-self:center;margin:22px 0 6px">
+<svg width="236" height="236" viewBox="0 0 236 236"><circle cx="118" cy="118" r="102" style="fill:none;stroke:#E8DFC9;stroke-width:14"></circle><circle cx="118" cy="118" r="102" transform="rotate(-90 118 118)" style="fill:none;stroke:#2E4057;stroke-width:14;stroke-linecap:round;stroke-dasharray:256 641"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:58px;font-weight:700;color:#20293B;line-height:1">12<span style="font-size:22px;font-weight:600;color:#8B8270">/30分</span></div>
+<div style="font-size:12px;color:#8B8270">解禁まで あと18分</div>
+</div>
+</div>
+<div style="height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.04em;margin-top:14px">読書を開始</div>
+<div style="font-size:12px;font-weight:600;color:#8B8270;margin:26px 0 10px;letter-spacing:.06em">今日のセッション</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">K</span><span style="flex:1;font-size:13.5px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">三体 Ⅱ 黒暗森林(上)</span><span style="font-size:13px;font-weight:600;color:#5C5647">8分</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">紙</span><span style="flex:1;font-size:13.5px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">読書について</span><span style="font-size:13px;font-weight:600;color:#5C5647">4分</span></div>
+</div>
+</div>
+</x-import>
+</div>
+<div id="1d" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1d" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1d</a>達成済み — リング満了・控えめな祝福</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div><div style="font-family:'Shippori Mincho',serif;font-size:21px;font-weight:700;color:#20293B">読書ロック</div><div style="font-size:12px;color:#8B8270;margin-top:2px">7月26日(日)</div></div>
+<div style="display:flex;align-items:center;gap:6px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:6px 12px"><span style="display:inline-block;width:10px;height:14px;background:#A6453C;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span><span style="font-size:12px;font-weight:500;color:#5C5647">7日連続</span></div>
+</div>
+<div style="align-self:center;margin-top:26px;display:flex;align-items:center;gap:7px;background:#A6453C;border-radius:100px;padding:7px 16px"><span style="font-size:12.5px;font-weight:600;color:#FBF6EA;white-space:nowrap">達成済み ✓</span></div>
+<div style="position:relative;width:236px;height:236px;align-self:center;margin:22px 0 6px">
+<svg width="236" height="236" viewBox="0 0 236 236">
+<circle cx="118" cy="118" r="102" style="fill:none;stroke:#A6453C;stroke-width:14"></circle>
+<circle cx="40" cy="34" r="3" style="fill:#A6453C;opacity:.55"></circle><circle cx="206" cy="46" r="2.5" style="fill:#2E4057;opacity:.45"></circle><circle cx="222" cy="150" r="3" style="fill:#A6453C;opacity:.4"></circle><circle cx="20" cy="132" r="2.5" style="fill:#2E4057;opacity:.4"></circle><circle cx="118" cy="10" r="2.5" style="fill:#A6453C;opacity:.5"></circle>
+</svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px">
+<span style="display:inline-block;width:14px;height:20px;background:#A6453C;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span>
+<div style="font-family:'Shippori Mincho',serif;font-size:58px;font-weight:700;color:#A6453C;line-height:1">30<span style="font-size:22px;font-weight:600">/30分</span></div>
+<div style="font-size:12px;color:#8B8270">今日の約束を果たしました</div>
+</div>
+</div>
+<div style="height:54px;border-radius:100px;background:rgba(46,64,87,.09);color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.04em;margin-top:14px">続けて読む</div>
+<div style="font-size:12px;font-weight:600;color:#8B8270;margin:26px 0 10px;letter-spacing:.06em">今日のセッション</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">K</span><span style="flex:1;font-size:13.5px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">三体 Ⅱ 黒暗森林(上)</span><span style="font-size:13px;font-weight:600;color:#5C5647">12分</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:#F0DFDA;color:#A6453C;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">D</span><span style="flex:1;font-size:13.5px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">チ。―地球の運動について― 第1集</span><span style="font-size:13px;font-weight:600;color:#5C5647">10分</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">紙</span><span style="flex:1;font-size:13.5px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">読書について</span><span style="font-size:13px;font-weight:600;color:#5C5647">8分</span></div>
+</div>
+</div>
+</x-import>
+</div>
+<div id="1e" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1e" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1e</a>ダークモード例(途中12分)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" dark="{{ true }}" bg="#171C26" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#171C26;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div><div style="font-family:'Shippori Mincho',serif;font-size:21px;font-weight:700;color:#EAE5D6">読書ロック</div><div style="font-size:12px;color:#8E96A8;margin-top:2px">7月26日(日)</div></div>
+<div style="display:flex;align-items:center;gap:6px;background:#202737;border:1px solid #2E3648;border-radius:100px;padding:6px 12px"><span style="display:inline-block;width:10px;height:14px;background:#C05A50;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span><span style="font-size:12px;font-weight:500;color:#B8BFCE">6日連続</span></div>
+</div>
+<div style="align-self:center;margin-top:26px;display:flex;align-items:center;gap:7px;background:rgba(232,223,201,.1);border-radius:100px;padding:7px 16px"><span style="width:7px;height:7px;border-radius:50%;background:#E8DFC9"></span><span style="font-size:12.5px;font-weight:600;color:#E8DFC9;white-space:nowrap">ロック中</span></div>
+<div style="position:relative;width:236px;height:236px;align-self:center;margin:22px 0 6px">
+<svg width="236" height="236" viewBox="0 0 236 236"><circle cx="118" cy="118" r="102" style="fill:none;stroke:#2C3547;stroke-width:14"></circle><circle cx="118" cy="118" r="102" transform="rotate(-90 118 118)" style="fill:none;stroke:#E8DFC9;stroke-width:14;stroke-linecap:round;stroke-dasharray:256 641"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:58px;font-weight:700;color:#EAE5D6;line-height:1">12<span style="font-size:22px;font-weight:600;color:#8E96A8">/30分</span></div>
+<div style="font-size:12px;color:#8E96A8">解禁まで あと18分</div>
+</div>
+</div>
+<div style="height:54px;border-radius:100px;background:#E8DFC9;color:#20293B;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.04em;margin-top:14px">読書を開始</div>
+<div style="font-size:12px;font-weight:600;color:#8E96A8;margin:26px 0 10px;letter-spacing:.06em">今日のセッション</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#202737;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:rgba(223,228,238,.12);color:#B8C4DC;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">K</span><span style="flex:1;font-size:13.5px;color:#EAE5D6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">三体 Ⅱ 黒暗森林(上)</span><span style="font-size:13px;font-weight:600;color:#B8BFCE">8分</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#202737;border-radius:14px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:10px;background:rgba(228,231,218,.12);color:#AEBB9A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">紙</span><span style="flex:1;font-size:13.5px;color:#EAE5D6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">読書について</span><span style="font-size:13px;font-weight:600;color:#B8BFCE">4分</span></div>
+</div>
+</div>
+</x-import>
+</div>
+</div>
+</section>
+
+<section style="padding:28px 44px 36px;border-top:1px solid rgba(0,0,0,.07);scroll-margin-top:16px" id="g-flow" data-screen-label="読書開始フロー">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-flow" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">C</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">読書開始フロー — ソース選択 → 本の宣言 → 計測中</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1f" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1f" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1f</a>ステップ1 — ソース選択</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">読書を開始</span><span style="flex:1"></span><span style="font-size:12px;color:#8B8270">1 / 3</span></div>
+<div style="font-family:'Shippori Mincho',serif;font-size:24px;font-weight:700;color:#20293B;margin:34px 0 6px">どれで読みますか</div>
+<div style="font-size:12.5px;color:#8B8270;margin-bottom:22px">選んだソースだけが計測の対象になります</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:16px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:20px;padding:20px 18px"><span style="width:46px;height:46px;border-radius:14px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700">K</span><span style="flex:1"><span style="display:block;font-size:16px;font-weight:600;color:#20293B">Kindle</span><span style="display:block;font-size:12px;color:#8B8270;margin-top:3px">Kindleアプリを開いている間だけ計測</span></span><span style="font-size:18px;color:#B4AB95">›</span></div>
+<div style="display:flex;align-items:center;gap:16px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:20px;padding:20px 18px"><span style="width:46px;height:46px;border-radius:14px;background:#F0DFDA;color:#A6453C;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700">D</span><span style="flex:1"><span style="display:block;font-size:16px;font-weight:600;color:#20293B">DMM Books</span><span style="display:block;font-size:12px;color:#8B8270;margin-top:3px">DMMブックスを開いている間だけ計測</span></span><span style="font-size:18px;color:#B4AB95">›</span></div>
+<div style="display:flex;align-items:center;gap:16px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:20px;padding:20px 18px"><span style="width:46px;height:46px;border-radius:14px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700">紙</span><span style="flex:1"><span style="display:block;font-size:16px;font-weight:600;color:#20293B">紙の本</span><span style="display:block;font-size:12px;color:#8B8270;margin-top:3px">スマホを伏せてタイマーで計測</span></span><span style="font-size:18px;color:#B4AB95">›</span></div>
+</div>
+</div>
+</x-import>
+</div>
+<div id="1g" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1g" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1g</a>ステップ2 — 本の宣言(Kindle)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">読書を開始</span><span style="flex:1"></span><span style="font-size:12px;color:#8B8270">2 / 3</span></div>
+<div style="font-family:'Shippori Mincho',serif;font-size:24px;font-weight:700;color:#20293B;margin:34px 0 6px">読む本を宣言</div>
+<div style="font-size:12.5px;color:#8B8270;margin-bottom:18px">セッション中は本を変更できません</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:14px;background:#FDFBF6;border:2px solid #2E4057;border-radius:16px;padding:16px"><span style="width:20px;height:20px;border-radius:50%;border:6px solid #2E4057;box-sizing:border-box;background:#FDFBF6"></span><span style="flex:1;font-size:14.5px;font-weight:600;color:#20293B">三体 Ⅱ 黒暗森林(上)</span><span style="width:28px;height:28px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span></div>
+<div style="display:flex;align-items:center;gap:14px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:16px;padding:16px"><span style="width:20px;height:20px;border-radius:50%;border:2px solid #B4AB95;box-sizing:border-box"></span><span style="flex:1;font-size:14.5px;color:#20293B">プロジェクト・ヘイル・メアリー(下)</span><span style="width:28px;height:28px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span></div>
+<div style="display:flex;align-items:center;gap:14px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:16px;padding:16px"><span style="width:20px;height:20px;border-radius:50%;border:2px solid #B4AB95;box-sizing:border-box"></span><span style="flex:1;font-size:14.5px;color:#20293B">具体と抽象</span><span style="width:28px;height:28px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed #C9BFA4;border-radius:16px;padding:15px;font-size:13.5px;font-weight:600;color:#8B8270">+ 本を登録</div>
+</div>
+<div style="flex:1"></div>
+<div style="height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.04em">この本で開始</div>
+</div>
+</x-import>
+</div>
+<div id="1h" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1h" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1h</a>ステップ3 — 計測中(Kindle)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="align-self:stretch;display:flex;align-items:center;gap:8px"><span style="font-size:16px;font-weight:600;color:#20293B">計測中</span><span style="flex:1"></span><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#5A6B4A;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:#5A6B4A"></span>記録中</span></div>
+<div style="position:relative;width:236px;height:236px;margin:44px 0 8px">
+<svg width="236" height="236" viewBox="0 0 236 236"><circle cx="118" cy="118" r="102" style="fill:none;stroke:#E8DFC9;stroke-width:14"></circle><circle cx="118" cy="118" r="102" transform="rotate(-90 118 118)" style="fill:none;stroke:#2E4057;stroke-width:14;stroke-linecap:round;stroke-dasharray:256 641"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:50px;font-weight:700;color:#20293B;line-height:1">12:34</div>
+<div style="font-size:12px;color:#8B8270">/ 30分</div>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:14px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:8px 16px 8px 10px"><span style="width:26px;height:26px;border-radius:8px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span><span style="font-size:12.5px;color:#5C5647">三体 Ⅱ 黒暗森林(上)</span></div>
+<div style="align-self:stretch;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:16px;padding:16px 18px;margin-top:26px">
+<div style="font-size:14px;font-weight:600;color:#20293B">Kindle を開いて読書を続けてください</div>
+<div style="font-size:12px;color:#8B8270;line-height:1.7;margin-top:6px">Kindle 以外のアプリを開いている間、計測は自動的に一時停止します。</div>
+</div>
+<div style="flex:1"></div>
+<div style="align-self:stretch;height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">Kindle を開く</div>
+<div style="font-size:13px;font-weight:600;color:#8B8270;margin-top:16px">セッションを終了</div>
+</div>
+</x-import>
+</div>
+<div id="1i" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1i" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1i</a>ステップ3 — 計測中(紙の本)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="align-self:stretch;display:flex;align-items:center;gap:8px"><span style="font-size:16px;font-weight:600;color:#20293B">紙の本</span><span style="flex:1"></span><span style="font-size:12px;color:#8B8270">タイマー待機中</span></div>
+<div style="display:flex;gap:3px;margin-top:52px;transform:rotate(-2deg)">
+<span style="width:34px;height:46px;background:#FDFBF6;border:1.5px solid #C9BFA4;border-radius:3px 8px 8px 3px;transform:skewY(4deg)"></span>
+<span style="width:34px;height:46px;background:#FDFBF6;border:1.5px solid #C9BFA4;border-radius:8px 3px 3px 8px;transform:skewY(-4deg)"></span>
+</div>
+<div style="position:relative;width:236px;height:236px;margin:26px 0 8px">
+<svg width="236" height="236" viewBox="0 0 236 236"><circle cx="118" cy="118" r="102" style="fill:none;stroke:#E8DFC9;stroke-width:14"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:50px;font-weight:700;color:#20293B;line-height:1">30:00</div>
+<div style="font-size:12px;color:#8B8270">タイマー</div>
+</div>
+</div>
+<div style="font-size:17px;font-weight:600;color:#20293B;margin-top:16px">スマホを伏せたら計測開始</div>
+<div style="font-size:12px;color:#8B8270;line-height:1.7;margin-top:8px;text-align:center">画面に触れたり持ち上げたりすると<br>計測は一時停止します</div>
+<div style="flex:1"></div>
+<div style="display:flex;align-items:center;gap:10px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:8px 16px 8px 10px"><span style="width:26px;height:26px;border-radius:8px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">紙</span><span style="font-size:12.5px;color:#5C5647">読書について</span></div>
+<div style="font-size:13px;font-weight:600;color:#8B8270;margin-top:18px">セッションを終了</div>
+</div>
+</x-import>
+</div>
+<div id="1j" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1j" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1j</a>一時停止 — 他アプリ操作を検知</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="align-self:stretch;display:flex;align-items:center;gap:8px"><span style="font-size:16px;font-weight:600;color:#20293B">計測中</span><span style="flex:1"></span><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#8B8270;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:#B4AB95"></span>一時停止中</span></div>
+<div style="align-self:stretch;display:flex;align-items:center;gap:12px;background:#F3E8D2;border:1px solid #DCC488;border-radius:16px;padding:14px 16px;margin-top:20px">
+<span style="width:34px;height:34px;border-radius:50%;background:#7A5A18;color:#F3E8D2;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;flex-shrink:0">⏸</span>
+<span><span style="display:block;font-size:13.5px;font-weight:600;color:#5C4310">他のアプリの操作を検知しました</span><span style="display:block;font-size:11.5px;color:#7A5A18;margin-top:2px">Kindle に戻ると計測を再開します</span></span>
+</div>
+<div style="position:relative;width:236px;height:236px;margin:32px 0 8px;opacity:.65">
+<svg width="236" height="236" viewBox="0 0 236 236"><circle cx="118" cy="118" r="102" style="fill:none;stroke:#E8DFC9;stroke-width:14"></circle><circle cx="118" cy="118" r="102" transform="rotate(-90 118 118)" style="fill:none;stroke:#8B8270;stroke-width:14;stroke-linecap:round;stroke-dasharray:256 641"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'Shippori Mincho',serif;font-size:50px;font-weight:700;color:#8B8270;line-height:1">12:34</div>
+<div style="font-size:12px;color:#B4AB95">/ 30分</div>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:14px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:8px 16px 8px 10px"><span style="width:26px;height:26px;border-radius:8px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span><span style="font-size:12.5px;color:#5C5647">三体 Ⅱ 黒暗森林(上)</span></div>
+<div style="flex:1"></div>
+<div style="align-self:stretch;height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">読書に戻る</div>
+<div style="font-size:13px;font-weight:600;color:#8B8270;margin-top:16px">セッションを終了</div>
+</div>
+</x-import>
+</div>
+</div>
+</section>
+
+<section style="padding:28px 44px 36px;border-top:1px solid rgba(0,0,0,.07);scroll-margin-top:16px" id="g-setup" data-screen-label="セットアップ">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-setup" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">D</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">初回セットアップウィザード(4ステップ・例として①と④)</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1k" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1k" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1k</a>手順① 使用状況へのアクセス</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#F5F0E4;padding:16px 28px 28px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="align-self:stretch;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:600;color:#20293B">はじめの設定</span><span style="font-size:12px;color:#8B8270">1 / 4</span></div>
+<div style="flex:1"></div>
+<div style="width:96px;height:96px;border-radius:50%;background:#FDFBF6;border:1px solid #E8E0CC;display:flex;align-items:flex-end;justify-content:center;gap:6px;padding-bottom:26px;box-sizing:border-box">
+<span style="width:9px;height:18px;border-radius:3px;background:#C9BFA4"></span><span style="width:9px;height:34px;border-radius:3px;background:#2E4057"></span><span style="width:9px;height:26px;border-radius:3px;background:#A6453C"></span>
+</div>
+<div style="font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;color:#20293B;margin-top:28px">使用状況へのアクセス</div>
+<div style="font-size:13px;color:#5C5647;line-height:1.9;text-align:center;margin-top:12px">いま開いているアプリを知るための許可です。<br>ブロック対象の検知と、Kindle 読書の<br>計測のどちらにも使います。</div>
+<div style="flex:1"></div>
+<div style="align-self:stretch;height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">設定画面を開く</div>
+<div style="display:flex;gap:8px;margin-top:26px"><span style="width:20px;height:8px;border-radius:100px;background:#2E4057"></span><span style="width:8px;height:8px;border-radius:50%;background:#D6CCB2"></span><span style="width:8px;height:8px;border-radius:50%;background:#D6CCB2"></span><span style="width:8px;height:8px;border-radius:50%;background:#D6CCB2"></span></div>
+</div>
+</x-import>
+</div>
+<div id="1l" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1l" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1l</a>手順④ VPN(サイトブロック)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#F5F0E4;padding:16px 28px 28px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="align-self:stretch;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:600;color:#20293B">はじめの設定</span><span style="font-size:12px;color:#8B8270">4 / 4</span></div>
+<div style="flex:1"></div>
+<div style="width:96px;height:96px;border-radius:50%;background:#FDFBF6;border:1px solid #E8E0CC;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0">
+<span style="width:26px;height:20px;border:5px solid #2E4057;border-bottom:none;border-radius:14px 14px 0 0;box-sizing:border-box"></span>
+<span style="width:38px;height:28px;border-radius:7px;background:#A6453C"></span>
+</div>
+<div style="font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;color:#20293B;margin-top:28px">サイトブロックの有効化</div>
+<div style="font-size:13px;color:#5C5647;line-height:1.9;text-align:center;margin-top:12px">端末内 VPN でマンガサイトなどの<br>ドメインをブロックします。通信内容が<br>外部に送られることはありません。</div>
+<div style="flex:1"></div>
+<div style="align-self:stretch;height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">VPN を有効にする</div>
+<div style="display:flex;gap:8px;margin-top:26px"><span style="width:8px;height:8px;border-radius:50%;background:#2E4057"></span><span style="width:8px;height:8px;border-radius:50%;background:#2E4057"></span><span style="width:8px;height:8px;border-radius:50%;background:#2E4057"></span><span style="width:20px;height:8px;border-radius:100px;background:#2E4057"></span></div>
+</div>
+</x-import>
+</div>
+</div>
+</section>
+<section style="padding:28px 44px 36px;border-top:1px solid rgba(0,0,0,.07);scroll-margin-top:16px" id="g-manage" data-screen-label="本リスト・ブロック設定">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-manage" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">E</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">本リスト管理・ブロック設定(2a・2b: 追加画面を追記)</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1m" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1m" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1m</a>本リスト</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">本リスト</span></div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:22px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:14px 16px"><span style="width:30px;height:30px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span><span style="flex:1;font-size:14px;color:#20293B">三体 Ⅱ 黒暗森林(上)</span><span style="font-size:16px;color:#B4AB95;letter-spacing:2px">⋯</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:14px 16px"><span style="width:30px;height:30px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span><span style="flex:1;font-size:14px;color:#20293B">プロジェクト・ヘイル・メアリー(下)</span><span style="font-size:16px;color:#B4AB95;letter-spacing:2px">⋯</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:14px 16px"><span style="width:30px;height:30px;border-radius:9px;background:#F0DFDA;color:#A6453C;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">D</span><span style="flex:1;font-size:14px;color:#20293B">チ。―地球の運動について― 第1集</span><span style="font-size:16px;color:#B4AB95;letter-spacing:2px">⋯</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:14px 16px"><span style="width:30px;height:30px;border-radius:9px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">紙</span><span style="flex:1;font-size:14px;color:#20293B">読書について</span><span style="font-size:16px;color:#B4AB95;letter-spacing:2px">⋯</span></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed #C9BFA4;border-radius:14px;padding:14px;font-size:13.5px;font-weight:600;color:#8B8270">+ 本を登録</div>
+</div>
+<div style="font-size:12px;font-weight:600;color:#8B8270;margin:26px 0 10px;letter-spacing:.06em">アーカイブ済み</div>
+<div style="display:flex;flex-direction:column;gap:8px;opacity:.6">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:14px 16px"><span style="width:30px;height:30px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span><span style="flex:1;font-size:14px;color:#8B8270;text-decoration:line-through">具体と抽象</span><span style="font-size:12px;color:#B4AB95">戻す</span></div>
+</div>
+</div>
+</x-import>
+</div>
+<div id="1n" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1n" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1n</a>本リスト — 空状態</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;background:#F5F0E4;padding:16px 28px 28px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="align-self:stretch;display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">本リスト</span></div>
+<div style="flex:1"></div>
+<div style="display:flex;gap:3px;transform:rotate(-2deg)">
+<span style="width:34px;height:46px;background:#FDFBF6;border:1.5px solid #C9BFA4;border-radius:3px 8px 8px 3px;transform:skewY(4deg)"></span>
+<span style="width:34px;height:46px;background:#FDFBF6;border:1.5px solid #C9BFA4;border-radius:8px 3px 3px 8px;transform:skewY(-4deg)"></span>
+</div>
+<div style="font-size:15px;font-weight:600;color:#20293B;margin-top:24px">読む本を登録しましょう</div>
+<div style="font-size:12px;color:#8B8270;margin-top:8px">活字の本だけを登録するのがルールです</div>
+<div style="height:52px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;padding:0 34px;margin-top:28px">+ 本を登録</div>
+<div style="flex:1"></div>
+</div>
+</x-import>
+</div>
+<div id="1o" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1o" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1o</a>ブロック設定 — アプリ(使用時間順)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">ブロック設定</span></div>
+<div style="display:flex;background:#EDE6D3;border-radius:100px;padding:4px;margin-top:18px">
+<span style="flex:1;height:36px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">アプリ</span>
+<span style="flex:1;height:36px;border-radius:100px;color:#5C5647;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">サイト</span>
+</div>
+<div style="font-size:11.5px;color:#8B8270;margin:16px 2px 10px">直近7日間の使用時間が長い順</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#20293B;color:#F5F0E4;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">X</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">X</span><span style="display:block;font-size:11.5px;color:#A6453C">6時間12分</span></span><span style="width:44px;height:26px;border-radius:100px;background:#2E4057;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#FDFBF6"></span></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#B9524A;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">Y</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">YouTube</span><span style="display:block;font-size:11.5px;color:#A6453C">4時間58分</span></span><span style="width:44px;height:26px;border-radius:100px;background:#2E4057;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#FDFBF6"></span></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#8A5E8E;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">I</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">Instagram</span><span style="display:block;font-size:11.5px;color:#A6453C">3時間20分</span></span><span style="width:44px;height:26px;border-radius:100px;background:#2E4057;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#FDFBF6"></span></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#4E6B8C;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">原</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">原神</span><span style="display:block;font-size:11.5px;color:#8B8270">2時間45分</span></span><span style="width:44px;height:26px;border-radius:100px;background:#2E4057;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#FDFBF6"></span></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#5A8A6E;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">L</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">LINE</span><span style="display:block;font-size:11.5px;color:#8B8270">58分</span></span><span style="width:44px;height:26px;border-radius:100px;border:2px solid #B4AB95;box-sizing:border-box;position:relative"><span style="position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#B4AB95"></span></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#C9BFA4;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">C</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">Chrome</span><span style="display:block;font-size:11.5px;color:#8B8270">44分</span></span><span style="width:44px;height:26px;border-radius:100px;border:2px solid #B4AB95;box-sizing:border-box;position:relative"><span style="position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#B4AB95"></span></span></div>
+</div>
+</div>
+</x-import>
+</div>
+<div id="2a" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#2a" style="font:600 10.5px monospace;padding:3px 7px;background:#A6453C;color:#fff;border-radius:5px;text-decoration:none">2a</a>アプリを追加 — 検索 + 候補提示</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">✕</span><span style="font-size:16px;font-weight:600;color:#20293B">ブロックするアプリを追加</span></div>
+<div style="display:flex;align-items:center;gap:10px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:12px 18px;margin-top:18px"><span style="font-size:14px;color:#B4AB95">🔍</span><span style="font-size:13.5px;color:#B4AB95;white-space:nowrap">アプリ名で検索</span></div>
+<div style="font-size:11.5px;color:#8B8270;margin:18px 2px 10px">よく使うアプリ(直近7日間・未ブロックのみ)</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border:2px solid #2E4057;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#3A6B5C;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">T</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">TikTok</span><span style="display:block;font-size:11.5px;color:#A6453C">2時間10分</span></span><span style="width:24px;height:24px;border-radius:8px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">✓</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border:2px solid #2E4057;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#B07A2E;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">ピ</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">ピッコマ</span><span style="display:block;font-size:11.5px;color:#A6453C">1時間52分</span></span><span style="width:24px;height:24px;border-radius:8px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">✓</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#8A5E8E;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">R</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">Reddit</span><span style="display:block;font-size:11.5px;color:#8B8270">1時間04分</span></span><span style="width:24px;height:24px;border-radius:8px;border:2px solid #C9BFA4;box-sizing:border-box"></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#4E6B8C;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">ニ</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">ニコニコ動画</span><span style="display:block;font-size:11.5px;color:#8B8270">48分</span></span><span style="width:24px;height:24px;border-radius:8px;border:2px solid #C9BFA4;box-sizing:border-box"></span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:14px;padding:12px 14px"><span style="width:34px;height:34px;border-radius:10px;background:#5A8A6E;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">S</span><span style="flex:1"><span style="display:block;font-size:14px;font-weight:600;color:#20293B">Spotify</span><span style="display:block;font-size:11.5px;color:#8B8270">32分</span></span><span style="width:24px;height:24px;border-radius:8px;border:2px solid #C9BFA4;box-sizing:border-box"></span></div>
+</div>
+<div style="flex:1"></div>
+<div style="height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">2件をブロックに追加</div>
+</div>
+</x-import>
+</div>
+<div id="2b" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#2b" style="font:600 10.5px monospace;padding:3px 7px;background:#A6453C;color:#fff;border-radius:5px;text-decoration:none">2b</a>サイトを追加 — 入力 + よくある候補</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">✕</span><span style="font-size:16px;font-weight:600;color:#20293B">ブロックするサイトを追加</span></div>
+<div style="display:flex;align-items:center;gap:10px;background:#FDFBF6;border:2px solid #2E4057;border-radius:16px;padding:14px 16px;margin-top:18px">
+<span style="font-size:13.5px;font-family:monospace;color:#20293B;white-space:nowrap">comic-walker.com<span style="display:inline-block;width:1.5px;height:16px;background:#2E4057;vertical-align:-3px;margin-left:1px"></span></span>
+</div>
+<div style="font-size:11.5px;color:#8B8270;margin:10px 4px 0;line-height:1.7">サブドメインも含めてブロックされます(www.comic-walker.com など)</div>
+<div style="font-size:11.5px;color:#8B8270;margin:22px 2px 10px">よくブロックされるサイト</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="border:1px solid #C9BFA4;border-radius:100px;padding:8px 14px;font-size:12px;font-family:monospace;color:#5C5647">nicovideo.jp</span>
+<span style="border:1px solid #C9BFA4;border-radius:100px;padding:8px 14px;font-size:12px;font-family:monospace;color:#5C5647">comic-walker.com</span>
+<span style="border:1px solid #C9BFA4;border-radius:100px;padding:8px 14px;font-size:12px;font-family:monospace;color:#5C5647">piccoma.com</span>
+<span style="border:1px solid #C9BFA4;border-radius:100px;padding:8px 14px;font-size:12px;font-family:monospace;color:#5C5647">manga-bank.org</span>
+<span style="border:1px solid #C9BFA4;border-radius:100px;padding:8px 14px;font-size:12px;font-family:monospace;color:#5C5647">twitch.tv</span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:14px;padding:13px 16px;margin-top:22px">
+<span style="width:10px;height:10px;border-radius:50%;border:2.5px solid #A6453C;flex-shrink:0"></span>
+<span style="font-size:12.5px;color:#5C5647;line-height:1.6">追加したドメインは即時ブロックに反映されます。削除は翌日 0時 から有効です</span>
+</div>
+<div style="flex:1"></div>
+<div style="height:54px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">このサイトをブロック</div>
+</div>
+</x-import>
+</div>
+<div id="1p" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1p" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1p</a>ブロック設定 — サイト + ノルマ時間</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">ブロック設定</span></div>
+<div style="display:flex;background:#EDE6D3;border-radius:100px;padding:4px;margin-top:18px">
+<span style="flex:1;height:36px;border-radius:100px;color:#5C5647;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">アプリ</span>
+<span style="flex:1;height:36px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">サイト</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:13px 14px"><span style="width:10px;height:10px;border-radius:50%;border:2.5px solid #A6453C"></span><span style="flex:1;font-size:13.5px;font-family:monospace;color:#20293B">shonenjumpplus.com</span><span style="font-size:15px;color:#B4AB95">✕</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:13px 14px"><span style="width:10px;height:10px;border-radius:50%;border:2.5px solid #A6453C"></span><span style="flex:1;font-size:13.5px;font-family:monospace;color:#20293B">comic-days.com</span><span style="font-size:15px;color:#B4AB95">✕</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:13px 14px"><span style="width:10px;height:10px;border-radius:50%;border:2.5px solid #A6453C"></span><span style="flex:1;font-size:13.5px;font-family:monospace;color:#20293B">tonarinoyj.jp</span><span style="font-size:15px;color:#B4AB95">✕</span></div>
+<div style="display:flex;align-items:center;gap:10px;border:1px dashed #C9BFA4;border-radius:14px;padding:13px 14px"><span style="font-size:14px;color:#8B8270">+</span><span style="font-size:13px;color:#B4AB95">ドメインを追加(例: example.com)</span><span style="flex:1"></span><a href="#2b" style="font:600 10px monospace;padding:2px 6px;background:rgba(0,0,0,.08);border-radius:4px;text-decoration:none;color:#1a1a1a">2b</a></div>
+</div>
+<div style="font-size:12px;font-weight:600;color:#8B8270;margin:28px 0 10px;letter-spacing:.06em">ノルマ時間</div>
+<div style="background:#FDFBF6;border:1px solid #E8E0CC;border-radius:18px;padding:18px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:14px;font-weight:600;color:#20293B">1日の読書ノルマ</span>
+<span style="display:flex;align-items:center;gap:14px"><span style="width:34px;height:34px;border-radius:50%;border:1.5px solid #C9BFA4;display:flex;align-items:center;justify-content:center;font-size:16px;color:#5C5647">−</span><span style="font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;color:#20293B">30<span style="font-size:13px">分</span></span><span style="width:34px;height:34px;border-radius:50%;border:1.5px solid #C9BFA4;display:flex;align-items:center;justify-content:center;font-size:16px;color:#5C5647">+</span></span>
+</div>
+<div style="display:flex;align-items:center;gap:8px;background:#F3E8D2;border-radius:10px;padding:9px 12px;margin-top:14px"><span style="font-size:12px;color:#7A5A18">短縮方向の変更は明日から反映されます</span></div>
+</div>
+</div>
+</x-import>
+</div>
+</div>
+</section>
+
+<section style="padding:28px 44px 36px;border-top:1px solid rgba(0,0,0,.07);scroll-margin-top:16px" id="g-history" data-screen-label="履歴">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-history" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">F</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">履歴</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1q" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1q" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1q</a>カレンダー + 日別セッション(24日選択中)</div>
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" width="{{ 390 }}" height="{{ 844 }}" bg="#F5F0E4" hint-size="406px,860px">
+<div style="min-height:100%;display:flex;flex-direction:column;background:#F5F0E4;padding:16px 20px 24px;box-sizing:border-box;font-family:'Noto Sans JP',sans-serif">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px;color:#20293B">←</span><span style="font-size:16px;font-weight:600;color:#20293B">履歴</span><span style="flex:1"></span><span style="display:flex;align-items:center;gap:6px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:100px;padding:6px 12px"><span style="display:inline-block;width:10px;height:14px;background:#A6453C;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span><span style="font-size:12px;font-weight:500;color:#5C5647">6日連続</span></span></div>
+<div style="background:#FDFBF6;border:1px solid #E8E0CC;border-radius:18px;padding:16px;margin-top:18px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px 12px"><span style="font-size:14px;color:#B4AB95">‹</span><span style="font-family:'Shippori Mincho',serif;font-size:15px;font-weight:700;color:#20293B">2026年 7月</span><span style="font-size:14px;color:#B4AB95">›</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:10.5px;color:#B4AB95;margin-bottom:6px"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;justify-items:center">
+<span></span><span></span><span></span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">1</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">2</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">3</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">4</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">5</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">6</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">7</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">8</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">9</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">10</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">11</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">12</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">13</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">14</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">15</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">16</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">17</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">18</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#8B8270;display:flex;align-items:center;justify-content:center;font-size:12.5px">19</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">20</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">21</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">22</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">23</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#2E4057;color:#FBF6EA;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:12.5px">24</span>
+<span style="width:34px;height:34px;border-radius:50%;background:#F0DFDA;color:#A6453C;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">25</span>
+<span style="width:34px;height:34px;border-radius:50%;border:1.5px solid #2E4057;box-sizing:border-box;color:#2E4057;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:12.5px">26</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#D6CCB2;display:flex;align-items:center;justify-content:center;font-size:12.5px">27</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#D6CCB2;display:flex;align-items:center;justify-content:center;font-size:12.5px">28</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#D6CCB2;display:flex;align-items:center;justify-content:center;font-size:12.5px">29</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#D6CCB2;display:flex;align-items:center;justify-content:center;font-size:12.5px">30</span>
+<span style="width:34px;height:34px;border-radius:50%;color:#D6CCB2;display:flex;align-items:center;justify-content:center;font-size:12.5px">31</span>
+</div>
+<div style="display:flex;gap:16px;margin-top:12px;padding:0 4px;font-size:10.5px;color:#8B8270"><span style="display:flex;align-items:center;gap:5px;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;background:#F0DFDA"></span>達成</span><span style="display:flex;align-items:center;gap:5px;white-space:nowrap"><span style="width:10px;height:10px;border-radius:50%;border:1px solid #C9BFA4"></span>未達成</span></div>
+</div>
+<div style="font-size:12px;font-weight:600;color:#8B8270;margin:22px 0 10px;letter-spacing:.06em">7月24日(金)・合計 30分</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:11px 14px"><span style="font-size:11.5px;color:#8B8270;width:36px">21:12</span><span style="width:28px;height:28px;border-radius:9px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">K</span><span style="flex:1;font-size:13px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">三体 Ⅱ 黒暗森林(上)</span><span style="font-size:12.5px;font-weight:600;color:#5C5647">18分</span></div>
+<div style="display:flex;align-items:center;gap:12px;background:#FDFBF6;border-radius:14px;padding:11px 14px"><span style="font-size:11.5px;color:#8B8270;width:36px">22:40</span><span style="width:28px;height:28px;border-radius:9px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">紙</span><span style="flex:1;font-size:13px;color:#20293B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">読書について</span><span style="font-size:12.5px;font-weight:600;color:#5C5647">12分</span></div>
+</div>
+</div>
+</x-import>
+</div>
+</div>
+</section>
+<section style="padding:28px 44px 48px;border-top:1px solid rgba(0,0,0,.07);scroll-margin-top:16px" id="g-common" data-screen-label="共通コンポーネント">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 18px">
+<a href="#g-common" style="font:600 10px monospace;padding:3px 7px;background:#20293B;color:#fff;border-radius:4px;text-decoration:none">G</a>
+<span style="font-size:13px;font-weight:600;color:#20293B">共通コンポーネント・常駐通知</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div id="1r" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1r" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1r</a>コンポーネントシート</div>
+<div style="width:640px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column;gap:26px">
+<div>
+<div style="font-size:11px;font-weight:600;color:#8B8270;letter-spacing:.08em;margin-bottom:12px">進捗リング — 0% / 40% / 80% / 100%(達成で赤へ)</div>
+<div style="display:flex;gap:24px;align-items:center">
+<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" style="fill:none;stroke:#E8DFC9;stroke-width:8"></circle></svg>
+<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" style="fill:none;stroke:#E8DFC9;stroke-width:8"></circle><circle cx="46" cy="46" r="38" transform="rotate(-90 46 46)" style="fill:none;stroke:#2E4057;stroke-width:8;stroke-linecap:round;stroke-dasharray:95 239"></circle></svg>
+<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" style="fill:none;stroke:#E8DFC9;stroke-width:8"></circle><circle cx="46" cy="46" r="38" transform="rotate(-90 46 46)" style="fill:none;stroke:#2E4057;stroke-width:8;stroke-linecap:round;stroke-dasharray:191 239"></circle></svg>
+<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" style="fill:none;stroke:#A6453C;stroke-width:8"></circle></svg>
+</div>
+</div>
+<div>
+<div style="font-size:11px;font-weight:600;color:#8B8270;letter-spacing:.08em;margin-bottom:12px">ソースチップ — 文字1字 + 固定チントで統一(実ロゴ不使用)</div>
+<div style="display:flex;gap:20px;align-items:center">
+<span style="display:flex;align-items:center;gap:8px"><span style="width:34px;height:34px;border-radius:10px;background:#DFE4EE;color:#2E4057;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">K</span><span style="font-size:12px;color:#5C5647">Kindle<br><span style="font-family:monospace;font-size:10px;color:#B4AB95">#DFE4EE / #2E4057</span></span></span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:34px;height:34px;border-radius:10px;background:#F0DFDA;color:#A6453C;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">D</span><span style="font-size:12px;color:#5C5647">DMM Books<br><span style="font-family:monospace;font-size:10px;color:#B4AB95">#F0DFDA / #A6453C</span></span></span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:34px;height:34px;border-radius:10px;background:#E4E7DA;color:#5A6B4A;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">紙</span><span style="font-size:12px;color:#5C5647">紙の本<br><span style="font-family:monospace;font-size:10px;color:#B4AB95">#E4E7DA / #5A6B4A</span></span></span>
+</div>
+</div>
+<div>
+<div style="font-size:11px;font-weight:600;color:#8B8270;letter-spacing:.08em;margin-bottom:12px">状態バッジ / ボタン</div>
+<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+<span style="display:flex;align-items:center;gap:7px;background:rgba(46,64,87,.09);border-radius:100px;padding:7px 16px"><span style="width:7px;height:7px;border-radius:50%;background:#2E4057"></span><span style="font-size:12.5px;font-weight:600;color:#2E4057;white-space:nowrap">ロック中</span></span>
+<span style="background:#A6453C;border-radius:100px;padding:7px 16px;font-size:12.5px;font-weight:600;color:#FBF6EA;white-space:nowrap">達成済み ✓</span>
+<span style="height:44px;border-radius:100px;background:#2E4057;color:#FBF6EA;display:inline-flex;align-items:center;padding:0 26px;font-size:14px;font-weight:700">プライマリ</span>
+<span style="height:44px;border-radius:100px;background:rgba(46,64,87,.09);color:#2E4057;display:inline-flex;align-items:center;padding:0 26px;font-size:14px;font-weight:700">トーナル</span>
+<span style="font-size:13px;font-weight:600;color:#8B8270">テキスト</span>
+</div>
+</div>
+</div>
+</div>
+<div id="1s" style="display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px">
+<div style="display:flex;align-items:baseline;gap:8px;font-size:11px;color:rgba(0,0,0,.55)"><a href="#1s" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none">1s</a>常駐通知</div>
+<div style="width:384px;background:#FDFBF6;border:1px solid #E8E0CC;border-radius:24px;padding:16px 18px;box-shadow:0 8px 24px rgba(32,41,59,.1)">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="width:22px;height:22px;border-radius:7px;background:#2E4057;display:flex;align-items:center;justify-content:center"><span style="display:inline-block;width:8px;height:11px;background:#F5F0E4;clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)"></span></span>
+<span style="font-size:12px;color:#8B8270">読書ロック・進行中</span>
+</div>
+<div style="font-size:14.5px;font-weight:600;color:#20293B;margin-top:10px">読書 12/30分 ─ ロック中</div>
+<div style="font-size:12.5px;color:#8B8270;margin-top:2px">あと18分で今日のロックが解除されます</div>
+<div style="height:6px;border-radius:100px;background:#E8DFC9;margin-top:12px;position:relative"><span style="position:absolute;left:0;top:0;bottom:0;width:40%;border-radius:100px;background:#2E4057"></span></div>
+<div style="display:flex;gap:18px;margin-top:14px"><span style="font-size:13px;font-weight:700;color:#2E4057">読書を開始</span></div>
+</div>
+<div style="font-size:11px;color:rgba(0,0,0,.45);max-width:384px;line-height:1.7">達成時は「今日の読書 30/30分 ✓ ─ ロック解除中」に切り替え、プログレスバーをしおりの赤で満たす。</div>
+</div>
+</div>
+<p style="margin:26px 0 0;font-size:12px;color:rgba(0,0,0,.5)">続きの例: 「<a href="#1a" style="font:600 10.5px monospace;padding:3px 7px;background:rgba(0,0,0,.08);border-radius:5px;text-decoration:none;color:#1a1a1a">1a</a> の達成直前(あと1分)状態も見たい」・「セットアップ②③も起こす」・「ホームを下タブ構成にしてみて」</p>
+</section>
+</x-dc>
+</body>
+</html>
