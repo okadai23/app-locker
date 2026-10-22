@@ -19,11 +19,11 @@ android {
 
     signingConfigs {
         create("release") {
-            // 個人配布用の自己署名鍵。release.keystore は .gitignore 済み
+            // 個人配布用の自己署名鍵。release.keystore は .gitignore 済み。パスワードは ~/.gradle/gradle.properties に置く
             storeFile = rootProject.file("release.keystore")
-            storePassword = "reading-lock"
+            storePassword = providers.gradleProperty("READINGLOCK_STORE_PASSWORD").orNull
             keyAlias = "readinglock"
-            keyPassword = "reading-lock"
+            keyPassword = providers.gradleProperty("READINGLOCK_KEY_PASSWORD").orNull
         }
     }
 
